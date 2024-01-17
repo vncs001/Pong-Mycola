@@ -1,3 +1,7 @@
+var firstTouch = true; 
+
+var canvas = document.querySelector('canvas');
+
 var DIRECTION = {
     IDLE: 0,
     UP: 1,
@@ -15,7 +19,7 @@ var Ball = {
         return {
             width: 18,
             height: 18,
-            x: (this.canvas.width / 2) - 9,
+            x: (this.canvas.width / 2) - 9, 
             y: (this.canvas.height / 2) - 9,
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
@@ -126,11 +130,7 @@ var Game = {
             if (this.ball.x >= this.canvas.width - this.ball.width) Pong._resetTurn.call(this, this.player, this.ai);
             if (this.ball.y <= 0) this.ball.moveY = DIRECTION.DOWN;
             if (this.ball.y >= this.canvas.height - this.ball.height) this.ball.moveY = DIRECTION.UP;
- 
-            // Move player if they player.move value was updated by a keyboard event
-            if (this.player.move === DIRECTION.UP) this.player.y -= this.player.speed;
-            else if (this.player.move === DIRECTION.DOWN) this.player.y += this.player.speed;
- 
+
             // On new serve (start of each turn) move the ball to the correct side
             // and randomize the direction to add some challenge.
             if (Pong._turnDelayIsOver.call(this) && this.turn) {
@@ -141,9 +141,8 @@ var Game = {
             }
  
             // If the player collides with the bound limits, update the x and y coords.
-            if (this.player.y <= 0) this.player.y = 0;
-            else if (this.player.y >= (this.canvas.height - this.player.height)) this.player.y = (this.canvas.height - this.player.height);
- 
+            if (this.player.move === DIRECTION.UP) this.player.y -= this.player.speed;
+            else if (this.player.move === DIRECTION.DOWN) this.player.y += this.player.speed;
             // Move ball in intended direction based on moveY and moveX values
             if (this.ball.moveY === DIRECTION.UP) this.ball.y -= (this.ball.speed / 1.5);
             else if (this.ball.moveY === DIRECTION.DOWN) this.ball.y += (this.ball.speed / 1.5);
@@ -162,25 +161,24 @@ var Game = {
  
             // Handle ai (AI) wall collision
             if (this.ai.y >= this.canvas.height - this.ai.height) this.ai.y = this.canvas.height - this.ai.height;
-            else if (this.ai.y <= 0) this.ai.y = 0;
+            else if (this.ai.y <= 0) this.ai.y = 0; 
  
             // Handle Player-Ball collisions
             if (this.ball.x - this.ball.width <= this.player.x && this.ball.x >= this.player.x - this.player.width) {
                 if (this.ball.y <= this.player.y + this.player.height && this.ball.y + this.ball.height >= this.player.y) {
                     this.ball.x = (this.player.x + this.ball.width);
                     this.ball.moveX = DIRECTION.RIGHT;
- 
                 }
             }
  
             // Handle ai-ball collision
-            if (this.ball.x - this.ball.width <= this.ai.x && this.ball.x >= this.ai.x - this.ai.width) {
-                if (this.ball.y <= this.ai.y + this.ai.height && this.ball.y + this.ball.height >= this.ai.y) {
-                    this.ball.x = (this.ai.x - this.ball.width);
-                    this.ball.moveX = DIRECTION.LEFT;
- 
+            if (this.ball.x - this.ball.width <= this.player.x && this.ball.x >= this.player.x - this.player.width) {
+                if (this.ball.y <= this.player.y + this.player.height && this.ball.y + this.ball.height >= this.player.y) {
+                    this.ball.x = (this.player.x + this.ball.width);
+                    this.ball.moveX = DIRECTION.RIGHT;
                 }
             }
+        
         }
  
         // Handle the end of round transition
@@ -199,7 +197,6 @@ var Game = {
                 this.ai.speed += 1;
                 this.ball.speed += 1;
                 this.round += 1;
- 
             }
         }
         // Check to see if the ai/AI has won the round.
@@ -316,26 +313,59 @@ var Game = {
     },
  
     listen: function () {
-        document.addEventListener('keydown', function (key) {
-            // Handle the 'Press any key to begin' function and start the game.
-            if (Pong.running === false) {
-                Pong.running = true;
-                window.requestAnimationFrame(Pong.loop);
-            }
- 
-            // Handle up arrow and w key events
-            if (key.keyCode === 38 || key.keyCode === 87) Pong.player.move = DIRECTION.UP;
- 
-            // Handle down arrow and s key events
-            if (key.keyCode === 40 || key.keyCode === 83) Pong.player.move = DIRECTION.DOWN;
+        var canvas = document.querySelector('canvas');
+
+        // Adicione este trecho de código no início do seu script
+        canvas.addEventListener('touchstart', function (event) {
+            handleTouch(event.touches[0]);
         });
- 
-        // Stop the player from moving when there are no keys being pressed.
-        document.addEventListener('keyup', function (key) { Pong.player.move = DIRECTION.IDLE; });
+
+        
+
+// ...
+
+var firstTouch = true;  // Adicione esta variável global para controlar o primeiro toque
+
+// .....................................................................................................
+canvas.addEventListener('touchstart', function (event) {
+    if (firstTouch) {
+        Pong.running = true;
+        window.requestAnimationFrame(Pong.loop);
+        firstTouch = false;
+    }
+
+    handleTouch(event.touches[0]);
+});
+
+canvas.addEventListener('touchmove', function (event) {
+    handleTouch(event.touches[0]);
+});
+
+canvas.addEventListener('touchend', function () {
+    Pong.player.move = DIRECTION.IDLE;
+});
+
+function handleTouch(touch) {
+    // Verifique a posição do toque em relação à altura da tela
+    var metadeDaTela = canvas.height / 2;
+    var toqueY = touch.clientY;
+
+    // Move o jogador com base na posição do toque
+    if (toqueY < metadeDaTela) {
+        Pong.player.move = DIRECTION.UP;
+    } else {
+        Pong.player.move = DIRECTION.DOWN;
+    }
+}
+// .....................................................................................................
+
+
+
+
     },
  
     // Reset the ball location, the player turns and set a delay before the next round begins.
-    _resetTurn: function(victor, loser) {
+    _resetTurn: function (victor, loser) {
         this.ball = Ball.new.call(this, this.ball.speed);
         this.turn = loser;
         this.timer = (new Date()).getTime();
@@ -344,16 +374,16 @@ var Game = {
     },
  
     // Wait for a delay to have passed after each turn.
-    _turnDelayIsOver: function() {
+    _turnDelayIsOver: function () {
         return ((new Date()).getTime() - this.timer >= 1000);
     },
  
-    // // Select a random color as the background of each level/round.
-    // _generateRoundColor: function () {
-    //     var newColor = colors[Math.floor(Math.random() * colors.length)];
-    //     if (newColor === this.color) return Pong._generateRoundColor();
-    //     return newColor;
-    // }
+    // Select a random color as the background of each level/round.
+    _generateRoundColor: function () {
+        var newColor = colors[Math.floor(Math.random() * colors.length)];
+        if (newColor === this.color) return Pong._generateRoundColor();
+        return newColor;
+    }
 };
  
 var Pong = Object.assign({}, Game);
