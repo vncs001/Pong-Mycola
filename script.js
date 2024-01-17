@@ -335,7 +335,7 @@ var Game = {
             handleTouch(event.touches[0]);
         });
 
-        
+         
 
 // ...
 
@@ -365,7 +365,7 @@ function handleTouch(touch) {
     var toqueX = touch.clientX;
 
     // Mova o jogador para cima se o toque estiver no lado esquerdo da tela
-    if (toqueX < canvas.width / 2) {
+    if (toqueX < canvas.width / 4) {
         Pong.player.move = DIRECTION.UP;
     }
     // Mova o jogador para baixo se o toque estiver no lado direito da tela
