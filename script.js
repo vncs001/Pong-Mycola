@@ -361,14 +361,15 @@ canvas.addEventListener('touchend', function () {
 });
 
 function handleTouch(touch) {
-    // Verifique a posição do toque em relação à altura da tela
-    var metadeDaTela = canvas.height / 2;
-    var toqueY = touch.clientY;
+    // Obtenha a posição horizontal do toque
+    var toqueX = touch.clientX;
 
-    // Move o jogador com base na posição do toque
-    if (toqueY < metadeDaTela) {
+    // Mova o jogador para cima se o toque estiver no lado esquerdo da tela
+    if (toqueX < canvas.width / 2) {
         Pong.player.move = DIRECTION.UP;
-    } else {
+    }
+    // Mova o jogador para baixo se o toque estiver no lado direito da tela
+    else {
         Pong.player.move = DIRECTION.DOWN;
     }
 }
