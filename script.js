@@ -17,13 +17,13 @@ var colors = ['#1abc9c', '#2ecc71', '#3498db', '#8c52ff', '#9b59b6'];
 var Ball = {
     new: function (incrementedSpeed) {
         return {
-            width: 18,
-            height: 18,
-            x: (this.canvas.width / 2) - 9, 
-            y: (this.canvas.height / 2) - 9,
+            width: 10,  // 18 * 0.6
+            height: 10,  // 18 * 0.6
+            x: (this.canvas.width / 2) - 5,  // (this.canvas.width / 2) - 9 * 0.6
+            y: (this.canvas.height / 2) - 5,  // (this.canvas.height / 2) - 9 * 0.6
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
-            speed: incrementedSpeed || 7 
+            speed: incrementedSpeed || 4.2  // 7 * 0.6
         };
     }
 };
@@ -32,14 +32,14 @@ var Ball = {
 var Ai = {
     new: function (side) {
         return {
-            width: 18,
-            height: 180,
-            x: side === 'left' ? 150 : this.canvas.width - 150,
-            y: (this.canvas.height / 2) - 35,
+            width: 10,  // 18 * 0.6
+            height: 108,  // 180 * 0.6
+            x: side === 'left' ? 90 : this.canvas.width - 90,  // 150 * 0.6
+            y: (this.canvas.height / 2) - 21,  // (this.canvas.height / 2) - 35 * 0.6
             score: 0,
             move: DIRECTION.IDLE,
-            speed: 8
-        };
+            speed: 4.8  // 8 * 0.6
+        }; 
     }
 };
  
@@ -48,8 +48,8 @@ var Game = {
         this.canvas = document.querySelector('canvas');
         this.context = this.canvas.getContext('2d');
  
-        this.canvas.width = 1400;
-        this.canvas.height = 1000;
+        this.canvas.width = 840;  // 1400 * 0.6
+        this.canvas.height = 600;  // 1000 * 0.6
  
         this.canvas.style.width = (this.canvas.width / 2) + 'px';
         this.canvas.style.height = (this.canvas.height / 2) + 'px';
@@ -116,7 +116,7 @@ var Game = {
         this.context.fillStyle = '#ffffff';
  
         // Draw the 'press any key to begin' text
-        this.context.fillText('Tecle na esquerda para cima e direita para baixo ',
+        this.context.fillText('Esquerda para cima / direita para baixo ',
             this.canvas.width / 2,
             this.canvas.height / 2 + 15
         );
@@ -249,16 +249,15 @@ var Game = {
         this.context.fillRect(
             this.player.x,
             this.player.y,
-            this.player.width,
-            this.player.height
+            10,  // this.player.width * 0.6
+            108  // this.player.height * 0.6
         );
- 
         // Draw the Ai
         this.context.fillRect(
             this.ai.x,
             this.ai.y,
-            this.ai.width,
-            this.ai.height 
+            10,  // this.ai.width * 0.6
+            108  // this.ai.height * 0.6
         );
  
         // Draw the Ball
@@ -266,22 +265,25 @@ var Game = {
             this.context.fillRect(
                 this.ball.x,
                 this.ball.y,
-                this.ball.width,
-                this.ball.height
+                10,  // this.ball.width * 0.6
+                10  // this.ball.height * 0.6
             );
+            
         }
  
         // Draw the net (Line in the middle)
         this.context.beginPath();
         this.context.setLineDash([7, 15]);
-        this.context.moveTo((this.canvas.width / 2), this.canvas.height - 140);
-        this.context.lineTo((this.canvas.width / 2), 140);
-        this.context.lineWidth = 10;
+        this.context.moveTo((this.canvas.width / 2), this.canvas.height - 84);  // (this.canvas.height - 140) * 0.6
+        this.context.lineTo((this.canvas.width / 2), 84);  // 140 * 0.6
+        this.context.lineWidth = 6;  // 10 * 0.6
         this.context.strokeStyle = '#ffffff';
         this.context.stroke();
  
         // Set the default canvas font and align it to the center
-        this.context.font = '100px Courier New';
+        this.context.font = '60px Courier New';  // '100px Courier New' * 0.6
+        this.context.font = '18px Courier New';  // '30px Courier New' * 0.6
+        this.context.font = '24px Courier';  // '40px Courier' * 0.6
         this.context.textAlign = 'center';
  
         // Draw the players score (left)
