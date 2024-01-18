@@ -116,7 +116,7 @@ var Game = {
         this.context.fillStyle = '#ffffff';
  
         // Draw the 'press any key to begin' text
-        this.context.fillText('Tecle para começar ',
+        this.context.fillText('Tecle na esquerda para cima e direita para baixo ',
             this.canvas.width / 2,
             this.canvas.height / 2 + 15
         );
