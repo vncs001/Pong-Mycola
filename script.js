@@ -144,18 +144,18 @@ var Game = {
             if (this.player.move === DIRECTION.UP) this.player.y -= this.player.speed;
             else if (this.player.move === DIRECTION.DOWN) this.player.y += this.player.speed;
             // Move ball in intended direction based on moveY and moveX values
-            if (this.ball.moveY === DIRECTION.UP) this.ball.y -= (this.ball.speed / 1.5);
-            else if (this.ball.moveY === DIRECTION.DOWN) this.ball.y += (this.ball.speed / 1.5);
+            if (this.ball.moveY === DIRECTION.UP) this.ball.y -= (this.ball.speed / 1);
+            else if (this.ball.moveY === DIRECTION.DOWN) this.ball.y += (this.ball.speed / 1);
             if (this.ball.moveX === DIRECTION.LEFT) this.ball.x -= this.ball.speed;
             else if (this.ball.moveX === DIRECTION.RIGHT) this.ball.x += this.ball.speed;
  
             // Handle ai (AI) UP and DOWN movement
             if (this.ai.y > this.ball.y - (this.ai.height / 2)) {
-                if (this.ball.moveX === DIRECTION.RIGHT) this.ai.y -= this.ai.speed / 1.5;
+                if (this.ball.moveX === DIRECTION.RIGHT) this.ai.y -= this.ai.speed / 2;
                 else this.ai.y -= this.ai.speed / 4;
             }
             if (this.ai.y < this.ball.y - (this.ai.height / 2)) {
-                if (this.ball.moveX === DIRECTION.RIGHT) this.ai.y += this.ai.speed / 1.5;
+                if (this.ball.moveX === DIRECTION.RIGHT) this.ai.y += this.ai.speed / 2;
                 else this.ai.y += this.ai.speed / 4;
             }
  
@@ -325,14 +325,12 @@ var Game = {
         Pong.update();
         Pong.draw();
  
-        // If the game is not over, draw the next frame.
         if (!Pong.over) requestAnimationFrame(Pong.loop);
     },
  
     listen: function () {
         var canvas = document.querySelector('canvas');
 
-        // Adicione este trecho de código no início do seu script
         canvas.addEventListener('touchstart', function (event) {
             handleTouch(event.touches[0]);
         });
@@ -341,7 +339,7 @@ var Game = {
 
 // ...
 
-var firstTouch = true;  // Adicione esta variável global para controlar o primeiro toque
+var firstTouch = true;  //primeiro toque
 
 // .....................................................................................................
 canvas.addEventListener('touchstart', function (event) {
@@ -376,9 +374,6 @@ function handleTouch(touch) {
     }
 }
 // .....................................................................................................
-
-
-
 
     },
  
