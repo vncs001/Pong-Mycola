@@ -17,28 +17,28 @@ var colors = ['#1abc9c', '#2ecc71', '#3498db', '#8c52ff', '#9b59b6'];
 var Ball = {
     new: function (incrementedSpeed) {
         return {
-            width: 10,  // 18 * 0.6
-            height: 10,  // 18 * 0.6
-            x: (this.canvas.width / 2) - 5,  // (this.canvas.width / 2) - 9 * 0.6
-            y: (this.canvas.height / 2) - 5,  // (this.canvas.height / 2) - 9 * 0.6
+            width: 10,  
+            height: 10, 
+            x: (this.canvas.width / 2) - 5,  
+            y: (this.canvas.height / 2) - 5,  
             moveX: DIRECTION.IDLE,
             moveY: DIRECTION.IDLE,
-            speed: incrementedSpeed || 4.2  // 7 * 0.6
+            speed: incrementedSpeed || 4.2  
         };
     }
 };
  
-// The ai object (The two lines that move up and down)
+// The ai object (Your enemy)
 var Ai = {
     new: function (side) {
         return {
-            width: 10,  // 18 * 0.6
-            height: 108,  // 180 * 0.6
-            x: side === 'left' ? 90 : this.canvas.width - 90,  // 150 * 0.6
-            y: (this.canvas.height / 2) - 21,  // (this.canvas.height / 2) - 35 * 0.6
+            width: 10,  
+            height: 108, 
+            x: side === 'left' ? 90 : this.canvas.width - 90,  
+            y: (this.canvas.height / 2) - 21,  
             score: 0,
             move: DIRECTION.IDLE,
-            speed: 4.8  // 8 * 0.6
+            speed: 5  
         }; 
     }
 };
@@ -48,8 +48,8 @@ var Game = {
         this.canvas = document.querySelector('canvas');
         this.context = this.canvas.getContext('2d');
  
-        this.canvas.width = 840;  // 1400 * 0.6
-        this.canvas.height = 600;  // 1000 * 0.6
+        this.canvas.width = 840;  
+        this.canvas.height = 600;  
  
         this.canvas.style.width = (this.canvas.width / 2) + 'px';
         this.canvas.style.height = (this.canvas.height / 2) + 'px';
@@ -249,15 +249,15 @@ var Game = {
         this.context.fillRect(
             this.player.x,
             this.player.y,
-            10,  // this.player.width * 0.6
-            108  // this.player.height * 0.6
+            10,  
+            108  
         );
         // Draw the Ai
         this.context.fillRect(
             this.ai.x,
             this.ai.y,
-            10,  // this.ai.width * 0.6
-            108  // this.ai.height * 0.6
+            10,  
+            108  
         );
  
         // Draw the Ball
@@ -265,8 +265,8 @@ var Game = {
             this.context.fillRect(
                 this.ball.x,
                 this.ball.y,
-                10,  // this.ball.width * 0.6
-                10  // this.ball.height * 0.6
+                10,  
+                10  
             );
             
         }
@@ -274,16 +274,16 @@ var Game = {
         // Draw the net (Line in the middle)
         this.context.beginPath();
         this.context.setLineDash([7, 15]);
-        this.context.moveTo((this.canvas.width / 2), this.canvas.height - 84);  // (this.canvas.height - 140) * 0.6
-        this.context.lineTo((this.canvas.width / 2), 84);  // 140 * 0.6
-        this.context.lineWidth = 6;  // 10 * 0.6
+        this.context.moveTo((this.canvas.width / 2), this.canvas.height - 84);  
+        this.context.lineTo((this.canvas.width / 2), 84);  
+        this.context.lineWidth = 6; 
         this.context.strokeStyle = '#ffffff';
         this.context.stroke();
  
         // Set the default canvas font and align it to the center
-        this.context.font = '60px Courier New';  // '100px Courier New' * 0.6
-        this.context.font = '18px Courier New';  // '30px Courier New' * 0.6
-        this.context.font = '24px Courier';  // '40px Courier' * 0.6
+        this.context.font = '60px Courier New';  
+        this.context.font = '18px Courier New';  
+        this.context.font = '24px Courier';  
         this.context.textAlign = 'center';
  
         // Draw the players score (left)
@@ -335,13 +335,8 @@ var Game = {
             handleTouch(event.touches[0]);
         });
 
-         
+var firstTouch = true;  //First touch
 
-// ...
-
-var firstTouch = true;  //primeiro toque
-
-// .....................................................................................................
 canvas.addEventListener('touchstart', function (event) {
     if (firstTouch) {
         Pong.running = true;
@@ -361,10 +356,10 @@ canvas.addEventListener('touchend', function () {
 });
 
 function handleTouch(touch) {
-    // Obtenha a posição horizontal do toque
+    // Touch position X
     var toqueX = touch.clientX;
 
-    // Mova o jogador para cima se o toque estiver no lado esquerdo da tela
+    // Moving the playes
     if (toqueX < canvas.width / 3.3) {
         Pong.player.move = DIRECTION.UP;
     }
@@ -373,7 +368,6 @@ function handleTouch(touch) {
         Pong.player.move = DIRECTION.DOWN;
     }
 }
-// .....................................................................................................
 
     },
  
