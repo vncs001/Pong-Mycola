@@ -62,7 +62,7 @@ var Game = {
         this.running = this.over = false;
         this.turn = this.ai;
         this.timer = this.round = 0;
-        this.color = '#8c52ff';
+        this.color = '#0c1ea6';
  
         Pong.menu();
         Pong.listen();
